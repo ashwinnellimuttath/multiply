@@ -19,8 +19,8 @@ int main (int argc, char *argv[])
     float *A_h, *B_h, *C_h;
 
     int condition = 0;
-    if (!condition) {
         float *A_d, *B_d, *C_d;
+    if (!condition) {
     }
     else {
 

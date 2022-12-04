@@ -189,7 +189,7 @@ int main (int argc, char *argv[])
         }
         else
         {
-            basicSgemmStream(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
+            basicSgemmStream(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
         }
     }
 

@@ -171,8 +171,8 @@ int main (int argc, char *argv[])
         cudaMemcpyAsync(dev_a2,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
         cudaMemcpyAsync(dev_b1,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams1);
         cudaMemcpyAsync(dev_b2,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
-        basicSgemmStream(segmentLen/matArow,matArow,matArow, dev_a, dev_b, dev_c, streams1);
-        basicSgemmStream(segmentLen/matArow,matArow,matArow, dev_a, dev_b, dev_c, streams2);
+        basicSgemmStream(matArow/segmentLen,matArow/segmentLen,matArow, dev_a1, dev_b1, dev_c1, streams1);
+        basicSgemmStream(matArow/segmentLen,matArow/segmentLen,matArow, dev_a2, dev_b2, dev_c2, streams2);
         // kernel<<<(int)ceil(N/1024)+1,1024,0,stream1>>>(dev_a,dev_b,dev_c);
         // kernel<<<(int)ceil(N/1024)+1,1024,0,stream2>>>(dev_a,dev_b,dev_c);
         cudaMemcpyAsync(c+1,dev_c1,segmentLen*sizeof(float),cudaMemcpyDeviceToHost,streams1);

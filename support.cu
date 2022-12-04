@@ -18,7 +18,7 @@ void verify(float *A, float *B, float *C, unsigned int m, unsigned int k,
       }
       count++;
       if (isnan(C[row*n + col])) {
-        printf("got nan vs %f\n", sum)
+        printf("got nan vs %f\n", sum);
       }
       float relativeError = (sum - C[row*n + col])/sum;
       // printf("\nsum %u\n\n",sum, C[row*n + col]);

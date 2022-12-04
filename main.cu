@@ -62,16 +62,16 @@ int main (int argc, char *argv[])
     VecSize = matArow*matAcol;
     const int segmentLen = VecSize / numStream;
 
-    A_h = (float*) malloc( sizeof(float)*A_sz );
-    // cudaHostAlloc((void**)&A_h, A_sz*sizeof(float), cudaHostAllocDefault);
+    // A_h = (float*) malloc( sizeof(float)*A_sz );
+    cudaHostAlloc((void**)&A_h, A_sz*sizeof(float), cudaHostAllocDefault);
     for (unsigned int i=0; i < A_sz; i++) { A_h[i] = (rand()%100)/100.00; }
 
-    B_h = (float*) malloc( sizeof(float)*B_sz );
-    // cudaHostAlloc((void**)&B_h, B_sz*sizeof(float), cudaHostAllocDefault);
+    // B_h = (float*) malloc( sizeof(float)*B_sz );
+    cudaHostAlloc((void**)&B_h, B_sz*sizeof(float), cudaHostAllocDefault);
     for (unsigned int i=0; i < B_sz; i++) { B_h[i] = (rand()%100)/100.00; }
 
-    C_h = (float*) malloc( sizeof(float)*C_sz );
-    // cudaHostAlloc((void**)&C_h, C_sz*sizeof(float), cudaHostAllocDefault);
+    // C_h = (float*) malloc( sizeof(float)*C_sz );
+    cudaHostAlloc((void**)&C_h, C_sz*sizeof(float), cudaHostAllocDefault);
 
     stopTime(&timer); printf("%f s\n", elapsedTime(timer));
     printf("    A: %u x %u\n    B: %u x %u\n    C: %u x %u\n", matArow, matAcol,

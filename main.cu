@@ -147,24 +147,24 @@ int main (int argc, char *argv[])
     //     }
     // }
 
-    for (int i = 0; i < numStream; i++)
-    {
-        int Offset = i * segmentLen;
-        cudaMemcpyAsync(&A_ds[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
-        cudaMemcpyAsync(&B_ds[Offset], &B_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+    // for (int i = 0; i < numStream; i++)
+    // {
+    //     int Offset = i * segmentLen;
+    //     cudaMemcpyAsync(&A_ds[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+    //     cudaMemcpyAsync(&B_ds[Offset], &B_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
         
-        basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[Offset], B_ds[Offset], C_ds[Offset], streams[i]);
-        // else
-        // {
-        //     cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-        //     cudaMemcpyAsync(B_d[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-        // }
-        cudaMemcpyAsync(&C_h[Offset], &C_ds[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
-        cudaDeviceSynchronize();
-    }
+    //     basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[Offset], B_ds[Offset], C_ds[Offset], streams[i]);
+    //     // else
+    //     // {
+    //     //     cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+    //     //     cudaMemcpyAsync(B_d[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+    //     // }
+    //     cudaMemcpyAsync(&C_h[Offset], &C_ds[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
+    //     cudaDeviceSynchronize();
+    // }
 
-    for (int i = 0; i < numStream; i++)
-        cudaStreamSynchronize(streams[i]);
+    // for (int i = 0; i < numStream; i++)
+    //     cudaStreamSynchronize(streams[i]);
 
 
 
@@ -180,7 +180,7 @@ int main (int argc, char *argv[])
     startTime(&timer);
 
 
-    // basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
+    basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
     // for (int i = 0; i < numStream; i++)
     // {
     //     if (i != numStream-1)

@@ -189,6 +189,8 @@ int main (int argc, char *argv[])
             basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
         }
         else {
+            printf("second"); fflush(stdout);
+
             cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
             cudaMemcpyAsync(&B_d[Offset], &B_h[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
             

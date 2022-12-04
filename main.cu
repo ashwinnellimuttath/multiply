@@ -45,6 +45,10 @@ int main (int argc, char *argv[])
     for (int i = 0; i < numStream; i++)
         cudaStreamCreate(&streams[i]);
 
+    cudaStream_t streams1, streams2;
+    cudaStreamCreate(&streams1);
+    cudaStreamCreate(&streams2);
+
     if (argc == 1) {
         matArow = 1000;
         matAcol = matBrow = 1000;

@@ -150,7 +150,7 @@ int main (int argc, char *argv[])
     //     }
     // }
 
-    for (int i = 1; i <= numStream; i++)
+    for (int i = 0; i < numStream; i++)
     {
         int Offset = i * segmentLen;
         cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);

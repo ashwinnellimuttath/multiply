@@ -58,7 +58,27 @@ __global__ void mysgemm(int m, int n, int k, const float *A, const float *B, flo
     /*************************************************************************/
 }
 
-void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C, cudaStream_t stream)
+void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C)
+{
+    // Initialize thread block and kernel grid dimensions ---------------------
+
+    const unsigned int BLOCK_SIZE = TILE_SIZE;
+	
+    /*************************************************************************/
+    //INSERT CODE HERE
+    dim3 DimGrid((n-1)/BLOCK_SIZE + 1,(m-1)/BLOCK_SIZE + 1,1); 
+    dim3 DimBlock(BLOCK_SIZE,BLOCK_SIZE,1);
+    /*************************************************************************/
+
+    // Invoke CUDA kernel -----------------------------------------------------
+
+    /*************************************************************************/
+    //INSERT CODE HERE
+    mysgemm<<<DimGrid,DimBlock>>>(m,n,k,A,B,C);  	
+    /*************************************************************************/
+}
+
+void basicSgemmStream(int m, int n, int k, const float *A, const float *B, float *C, cudaStream_t stream)
 {
     // Initialize thread block and kernel grid dimensions ---------------------
 

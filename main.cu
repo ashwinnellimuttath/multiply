@@ -178,17 +178,17 @@ int main (int argc, char *argv[])
     startTime(&timer);
 
 
-    // basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
-    for (int i = 0; i < numStream; i++)
-    {
-        if (i != numStream-1)
-        {
-            basicSgemm(matArow/numStream, matArow/numStream, matArow/numStream, A_d[i], B_d[i], C_d[i], streams[i]);
-        }
-        else
-        {
-            basicSgemm(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
-        }
+    basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
+    // for (int i = 0; i < numStream; i++)
+    // {
+    //     if (i != numStream-1)
+    //     {
+    //         basicSgemm(matArow/numStream, matArow/numStream, matArow/numStream, A_d[i], B_d[i], C_d[i], streams[i]);
+    //     }
+    //     else
+    //     {
+    //         basicSgemm(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
+    //     }
     }
 
 

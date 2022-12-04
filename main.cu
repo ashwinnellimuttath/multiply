@@ -259,9 +259,9 @@ int main (int argc, char *argv[])
     cudaFreeHost(C_h);
     /*************************************************************************/
     //INSERT CODE HERE
-    cudaFree(A_d);
-    cudaFree(B_d);
-    cudaFree(C_d);
+    // cudaFree(A_d);
+    // cudaFree(B_d);
+    // cudaFree(C_d);
     for (int i = 0; i < numStream; i++)
     {
         cudaFree(A_ds[i]);

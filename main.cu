@@ -84,25 +84,25 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     //INSERT CODE HERE
-    // cudaMalloc((float**) &A_d, sizeof(float)*A_sz);
-    // cudaMalloc((float**) &B_d, sizeof(float)*B_sz);
-    // cudaMalloc((float**) &C_d, sizeof(float)*C_sz); 
+    cudaMalloc((float**) &A_d, sizeof(float)*A_sz);
+    cudaMalloc((float**) &B_d, sizeof(float)*B_sz);
+    cudaMalloc((float**) &C_d, sizeof(float)*C_sz); 
 
-    for (int i = 0; i < numStream; i++)
-    {
-        if (i != numStream-1)
-        {
-            cudaMalloc((void**) &A_d[i], sizeof(float) * segmentLen);
-            cudaMalloc((void**) &B_d[i], sizeof(float) * segmentLen);
-            cudaMalloc((void**) &C_d[i], sizeof(float) * segmentLen);
-        }
-        else    // remainder
-        {
-            cudaMalloc((void**) &A_d[i], sizeof(float) * (segmentLen + VecSize % numStream));
-            cudaMalloc((void**) &B_d[i], sizeof(float) * (segmentLen + VecSize % numStream));
-            cudaMalloc((void**) &C_d[i], sizeof(float) * (segmentLen + VecSize % numStream));
-        }
-    }
+    // for (int i = 0; i < numStream; i++)
+    // {
+    //     if (i != numStream-1)
+    //     {
+    //         cudaMalloc((void**) &A_d[i], sizeof(float) * segmentLen);
+    //         cudaMalloc((void**) &B_d[i], sizeof(float) * segmentLen);
+    //         cudaMalloc((void**) &C_d[i], sizeof(float) * segmentLen);
+    //     }
+    //     else    // remainder
+    //     {
+    //         cudaMalloc((void**) &A_d[i], sizeof(float) * (segmentLen + VecSize % numStream));
+    //         cudaMalloc((void**) &B_d[i], sizeof(float) * (segmentLen + VecSize % numStream));
+    //         cudaMalloc((void**) &C_d[i], sizeof(float) * (segmentLen + VecSize % numStream));
+    //     }
+    // }
 
     // for (int i = 0; i < numStream; i++)
     // {
@@ -170,8 +170,8 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     
-    cudaDeviceSynchronize();
-    stopTime(&timer); printf("%f s\n", elapsedTime(timer));
+    // cudaDeviceSynchronize();
+    // stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
     // Launch kernel using standard sgemm interface ---------------------------
     printf("Launching kernel..."); fflush(stdout);
@@ -200,9 +200,9 @@ int main (int argc, char *argv[])
 
 
 
-    cuda_ret = cudaDeviceSynchronize();
-    if(cuda_ret != cudaSuccess) printf("Unable to launch kernel");
-    stopTime(&timer); printf("%f s\n", elapsedTime(timer));
+    // cuda_ret = cudaDeviceSynchronize();
+    // if(cuda_ret != cudaSuccess) printf("Unable to launch kernel");
+    // stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
     // Copy device variables from host ----------------------------------------
     printf("Copying data from device to host..."); fflush(stdout);

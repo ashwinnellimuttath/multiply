@@ -74,7 +74,7 @@ void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C, c
 
     /*************************************************************************/
     //INSERT CODE HERE
-    mysgemm<<<DimGrid,DimBlock>>>(m,n,k,A,B,C);  	
+    mysgemm<<<DimGrid,DimBlock, 0, stream>>>(m,n,k,A,B,C);  	
     /*************************************************************************/
 }
 

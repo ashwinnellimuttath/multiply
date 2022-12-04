@@ -33,7 +33,7 @@ int main (int argc, char *argv[])
 
 
     cudaStream_t streams[numStream];
-    for (int i = 0; i <= numStream; i++)
+    for (int i = 0; i < numStream; i++)
         cudaStreamCreate(&streams[i]);
 
     if (argc == 1) {
@@ -150,7 +150,7 @@ int main (int argc, char *argv[])
     //     }
     // }
 
-    for (int i = 1; i <= numStream; i++)
+    for (int i = 0; i < numStream; i++)
     {
         int Offset = i * segmentLen;
         cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
@@ -270,7 +270,7 @@ int main (int argc, char *argv[])
     cudaFree(A_d);
     cudaFree(B_d);
     cudaFree(C_d);
-    for (int i = 0; i <= numStream; i++)
+    for (int i = 0; i < numStream; i++)
     {
         // cudaFree(A_ds[i]);
         // cudaFree(B_ds[i]);

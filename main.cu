@@ -59,7 +59,7 @@ int main (int argc, char *argv[])
     B_sz = matBrow*matBcol;
     C_sz = matArow*matBcol;
     VecSize = matArow*matAcol;
-    const int segmentLen = (matArow*matAcol) / numStream;
+    const int segmentLen = VecSize / numStream;
 
     // A_h = (float*) malloc( sizeof(float)*A_sz );
     cudaHostAlloc((void**)&A_h, A_sz*sizeof(float), cudaHostAllocDefault);
@@ -145,8 +145,8 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     
-    cudaDeviceSynchronize();
-    stopTime(&timer); printf("%f s\n", elapsedTime(timer));
+    // cudaDeviceSynchronize();
+    // stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
     // Launch kernel using standard sgemm interface ---------------------------
     printf("Launching kernel..."); fflush(stdout);
@@ -175,13 +175,13 @@ int main (int argc, char *argv[])
 
 
 
-    cuda_ret = cudaDeviceSynchronize();
-    if(cuda_ret != cudaSuccess) printf("Unable to launch kernel");
-    stopTime(&timer); printf("%f s\n", elapsedTime(timer));
+    // cuda_ret = cudaDeviceSynchronize();
+    // if(cuda_ret != cudaSuccess) printf("Unable to launch kernel");
+    // stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
     // Copy device variables from host ----------------------------------------
     printf("Copying data from device to host..."); fflush(stdout);
-    startTime(&timer);
+    // startTime(&timer);
 
     /*************************************************************************/
     //INSERT CODE HERE

@@ -267,7 +267,7 @@ int main (int argc, char *argv[])
     cudaFree(A_d);
     cudaFree(B_d);
     cudaFree(C_d);
-    for (int i = 0; i < =numStream; i++)
+    for (int i = 0; i <= numStream; i++)
     {
         // cudaFree(A_ds[i]);
         // cudaFree(B_ds[i]);

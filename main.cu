@@ -163,8 +163,8 @@ int main (int argc, char *argv[])
         cudaStreamSynchronize(streams[i]);
     }
 
-    for (int i = 0; i < numStream; i++)
-        cudaStreamSynchronize(streams[i]);
+    // for (int i = 0; i < numStream; i++)
+    //     cudaStreamSynchronize(streams[i]);
 
 
 

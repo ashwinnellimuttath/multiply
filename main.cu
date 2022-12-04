@@ -136,13 +136,13 @@ int main (int argc, char *argv[])
     {
         if (i != numStream-1)
         {
-            cudaMemcpyAsync(A_ds[i], A_h + i*segmentLen, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
-            cudaMemcpyAsync(B_ds[i], B_h + i*segmentLen, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(A_ds[i], A_h, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(B_ds[i], B_h , sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
         }
         else
         {
-            cudaMemcpyAsync(A_ds[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-            cudaMemcpyAsync(B_ds[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(A_ds[i], A_h , sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(B_ds[i], B_h , sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
         }
     }
 
@@ -219,11 +219,11 @@ int main (int argc, char *argv[])
     {
         if (i != numStream-1)
         {
-            cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
+            cudaMemcpyAsync(C_h , C_ds[i], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
         }
         else
         {
-            cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
+            cudaMemcpyAsync(C_h , C_ds[i], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
         }
     }
 

@@ -191,6 +191,7 @@ int main (int argc, char *argv[])
         {
             basicSgemmStream(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
         }
+        cudaStreamSynchronize(streams[i]);
     }
 
 

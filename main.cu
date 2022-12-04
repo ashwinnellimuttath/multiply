@@ -113,9 +113,9 @@ int main (int argc, char *argv[])
             // cudaMalloc((float**) &C_ds[i], sizeof(float) * VecSize);
 
     }
-    cudaMalloc((int **)&A_d, nBytes);
-    cudaMalloc((int **)&B_d, nBytes);
-    cudaMalloc((int **)&C_d, nBytes);
+    cudaMalloc((int **)&A_d, sizeof(float) * VecSize);
+    cudaMalloc((int **)&B_d, sizeof(float) * VecSize);
+    cudaMalloc((int **)&C_d, sizeof(float) * VecSize);
 
 
 
@@ -157,7 +157,7 @@ int main (int argc, char *argv[])
         cudaMemcpyAsync(B_d, B_h, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
         
         // basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[Offset], B_ds[Offset], C_ds[Offset], streams[i]);
-        basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, C_d[Offset], streams[i]);
+        basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
         // else
         // {
         //     cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);

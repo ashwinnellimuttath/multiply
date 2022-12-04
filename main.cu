@@ -161,21 +161,21 @@ int main (int argc, char *argv[])
     /*************************************************************************/
     for(int i=0;i < VecSize;i+= segmentLen*2) { // loop over data in chunks
  // interweave stream 1 and steam 2
-        cudaMemcpyAsync(dev_a1,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,stream1);
-        cudaMemcpyAsync(dev_a2,a+i,segmentLen*sizeof(int),cudaMemcpyHostToDevice,stream2);
-        cudaMemcpyAsync(dev_b1,b+i,segmentLen*sizeof(int),cudaMemcpyHostToDevice,stream1);
-        cudaMemcpyAsync(dev_b2,b+i,segmentLen*sizeof(int),cudaMemcpyHostToDevice,stream2);
+        cudaMemcpyAsync(dev_a1,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams1);
+        cudaMemcpyAsync(dev_a2,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
+        cudaMemcpyAsync(dev_b1,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams1);
+        cudaMemcpyAsync(dev_b2,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
         basicSgemmStream(segmentLen/matArow,matArow,matArow, dev_a1, dev_b1, dev_c1, streams1);
         basicSgemmStream(segmentLen/matArow,matArow,matArow, dev_a2, dev_b2, dev_c2, streams2);
-        kernel<<<(int)ceil(N/1024)+1,1024,0,stream1>>>(dev_a,dev_b,dev_c);
-        kernel<<<(int)ceil(N/1024)+1,1024,0,stream2>>>(dev_a,dev_b,dev_c);
-        cudaMemcpyAsync(c+1,dev_c1,segmentLen*sizeof(int),cudaMemcpyDeviceToHost,stream1);
-        cudaMemcpyAsync(c+1,dev_c2,segmentLen*sizeof(int),cudaMemcpyDeviceToHost,stream2);
+        // kernel<<<(int)ceil(N/1024)+1,1024,0,stream1>>>(dev_a,dev_b,dev_c);
+        // kernel<<<(int)ceil(N/1024)+1,1024,0,stream2>>>(dev_a,dev_b,dev_c);
+        cudaMemcpyAsync(c+1,dev_c1,segmentLen*sizeof(float),cudaMemcpyDeviceToHost,streams1);
+        cudaMemcpyAsync(c+1,dev_c2,segmentLen*sizeof(float),cudaMemcpyDeviceToHost,streams2);
     }
 
 
-    cudaStreamSynchronise(stream1); // wait for stream1 to finish
-    cudaStreamSynchronise(stream2); 
+    cudaStreamSynchronise(streams1); // wait for stream1 to finish
+    cudaStreamSynchronise(streams2); 
 
 
 

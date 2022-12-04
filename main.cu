@@ -3,7 +3,7 @@
 #include "kernel.cu"
 #include "support.h"
 
-const unsigned int numStream = 1;
+const unsigned int numStream = 2;
 
 int main (int argc, char *argv[])
 {
@@ -188,7 +188,7 @@ int main (int argc, char *argv[])
         }
         else
         {
-            basicSgemmStream(2, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
+            basicSgemmStream(matArow/numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
         }
         cudaStreamSynchronize(streams[i]);
     }

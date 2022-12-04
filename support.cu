@@ -17,19 +17,12 @@ void verify(float *A, float *B, float *C, unsigned int m, unsigned int k,
         sum += A[row*k + i]*B[i*n + col];
       }
       count++;
-      if (isnan(C[row*n + col])) {
-        printf("got nan vs %f\n", sum);
-      }
       float relativeError = (sum - C[row*n + col])/sum;
-      // printf("\nsum %u\n\n",sum, C[row*n + col]);
-      // printf("\nsum %u\n\n",C[row*n + col]);
-      // printf("\nsums %u\n\n",C[row*n + col]);
-      // printf("\nsumValue %u\n\n",sum);
-      // printf("%f/%f ", sum, C[row*n + col]);
+      //printf("%f/%f ", sum, C[row*n + col]);
       if (relativeError > relativeTolerance
         || relativeError < -relativeTolerance) {
         printf("\nTEST FAILED %u\n\n",count);
-        // exit(1);
+        exit(1);
       }
     }
   }
@@ -49,4 +42,3 @@ float elapsedTime(Timer timer) {
     return ((float) ((timer.endTime.tv_sec - timer.startTime.tv_sec) \
                 + (timer.endTime.tv_usec - timer.startTime.tv_usec)/1.0e6));
 }
-

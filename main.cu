@@ -22,10 +22,7 @@ int main (int argc, char *argv[])
 
     float *A_ds[numStream], *B_ds[numStream], *C_ds[numStream];
 
-    float *dev_a1, *dev_b1, *dev_c1; // stream 1 mem ptrs
-    float *dev_a2, *dev_b2, *dev_c2; // stream 2 mem ptrs
-    float *a, *b, *c;
-    float *dev_a, *dev_b, *dev_c;
+
 
     // float *hA1,*hA2,*hB1,*hB2,*hC1,*hC2,*hC3,*hC4;
     // float *dA1,*dA1_2,*dA2,*dA2_2,*dB1,*dB1_2,*dB2,*dB2_2;
@@ -45,9 +42,6 @@ int main (int argc, char *argv[])
     for (int i = 0; i < numStream; i++)
         cudaStreamCreate(&streams[i]);
 
-    cudaStream_t streams1, streams2;
-    cudaStreamCreate(&streams1);
-    cudaStreamCreate(&streams2);
 
     if (argc == 1) {
         matArow = 1000;
@@ -79,20 +73,21 @@ int main (int argc, char *argv[])
 
     // A_h = (float*) malloc( sizeof(float)*A_sz );
     cudaHostAlloc((void**)&A_h, A_sz*sizeof(float), cudaHostAllocDefault);
-    cudaHostAlloc((void**)&a, A_sz*sizeof(float), cudaHostAllocDefault);
     for (unsigned int i=0; i < A_sz; i++) { A_h[i] = (rand()%100)/100.00; }
-    for (unsigned int i=0; i < A_sz; i++) { a[i] = (rand()%100)/100.00; }
+    // cudaHostAlloc((void**)&a, A_sz*sizeof(float), cudaHostAllocDefault);
+    // for (unsigned int i=0; i < A_sz; i++) { a[i] = (rand()%100)/100.00; }
 
     // B_h = (float*) malloc( sizeof(float)*B_sz );
     cudaHostAlloc((void**)&B_h, B_sz*sizeof(float), cudaHostAllocDefault);
-    cudaHostAlloc((void**)&b, A_sz*sizeof(float), cudaHostAllocDefault);
 
     for (unsigned int i=0; i < A_sz; i++) { B_h[i] = (rand()%100)/100.00; }
-    for (unsigned int i=0; i < B_sz; i++) { b[i] = (rand()%100)/100.00; }
+
+    // cudaHostAlloc((void**)&b, A_sz*sizeof(float), cudaHostAllocDefault);
+    // for (unsigned int i=0; i < B_sz; i++) { b[i] = (rand()%100)/100.00; }
 
     // C_h = (float*) malloc( sizeof(float)*C_sz );
     cudaHostAlloc((void**)&C_h, C_sz*sizeof(float), cudaHostAllocDefault);
-    cudaHostAlloc((void**)&c, A_sz*sizeof(float), cudaHostAllocDefault);
+    // cudaHostAlloc((void**)&c, A_sz*sizeof(float), cudaHostAllocDefault);
 
 
     stopTime(&timer); printf("%f s\n", elapsedTime(timer));

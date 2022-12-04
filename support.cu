@@ -20,7 +20,7 @@ void verify(float *A, float *B, float *C, unsigned int m, unsigned int k,
       float relativeError = (sum - C[row*n + col])/sum;
       // printf("\nsum %u\n\n",sum, C[row*n + col]);
       // printf("\nsum %u\n\n",C[row*n + col]);
-      printf("\nsums %u\n\n",sum);
+      printf("\nsums %u\n\n",C[row*n + col]);
       if (relativeError > relativeTolerance
         || relativeError < -relativeTolerance) {
         // printf("\nTEST FAILED %u\n\n",count);

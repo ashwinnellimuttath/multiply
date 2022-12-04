@@ -159,8 +159,8 @@ int main (int argc, char *argv[])
         //     cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
         //     cudaMemcpyAsync(B_d[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
         // }
-        cudaMemcpyAsync(&C_h, &C_ds[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
         cudaStreamSynchronize(streams[i]);
+        cudaMemcpyAsync(&C_h, &C_ds[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
     }
 
     // for (int i = 0; i < numStream; i++)

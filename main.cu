@@ -133,19 +133,19 @@ int main (int argc, char *argv[])
     cudaMemcpy(A_d, A_h, sizeof(float) * A_sz, cudaMemcpyHostToDevice);
     cudaMemcpy(B_d, B_h, sizeof(float) * B_sz, cudaMemcpyHostToDevice);
 
-    // for (int i = 0; i < numStream; i++)
-    // {
-    //     if (i != numStream-1)
-    //     {
-    //         cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
-    //         cudaMemcpyAsync(B_d[i], B_h + i*segmentLen, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
-    //     }
-    //     else
-    //     {
-    //         cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-    //         cudaMemcpyAsync(B_d[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-    //     }
-    // }
+    for (int i = 0; i < numStream; i++)
+    {
+        if (i != numStream-1)
+        {
+            cudaMemcpyAsync(A_ds[i], A_h + i*segmentLen, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(B_ds[i], B_h + i*segmentLen, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+        }
+        else
+        {
+            cudaMemcpyAsync(A_ds[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(B_ds[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+        }
+    }
 
     // for (int i = 0; i < numStream; i++)
     // {
@@ -180,18 +180,18 @@ int main (int argc, char *argv[])
     startTime(&timer);
 
 
-    basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
-    // for (int i = 0; i < numStream; i++)
-    // {
-    //     if (i != numStream-1)
-    //     {
-    //         basicSgemm(matArow/numStream, matArow/numStream, matArow/numStream, A_d[i], B_d[i], C_d[i], streams[i]);
-    //     }
-    //     else
-    //     {
-    //         basicSgemm(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
-    //     }
-    // }
+    // basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
+    for (int i = 0; i < numStream; i++)
+    {
+        if (i != numStream-1)
+        {
+            basicSgemm(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[i], B_ds[i], C_ds[i], streams[i]);
+        }
+        else
+        {
+            basicSgemm(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
+        }
+    }
 
 
 

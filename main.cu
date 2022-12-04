@@ -217,7 +217,7 @@ int main (int argc, char *argv[])
 
     printf("Verifying results..."); fflush(stdout);
 
-    print(C_h, "c_h");fflush(stdout);
+    printf(C_h, "c_h");fflush(stdout);
 
     verify(A_h, B_h, C_h, matArow, matAcol, matBcol);
 

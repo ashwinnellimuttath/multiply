@@ -3,7 +3,7 @@
 #include "kernel.cu"
 #include "support.h"
 
-const unsigned int numStream = 1;
+const unsigned int numStream = 4;
 
 int main (int argc, char *argv[])
 {
@@ -182,14 +182,14 @@ int main (int argc, char *argv[])
     // basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
     for (int i = 0; i < numStream; i++)
     {
-        if (i != numStream-1)
-        {
             basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[i], B_ds[i], C_ds[i], streams[i]);
-        }
-        else
-        {
-            basicSgemmStream(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
-        }
+        // if (i != numStream-1)
+        // {
+        // }
+        // else
+        // {
+        //     basicSgemmStream(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
+        // }
         cudaStreamSynchronize(streams[i]);
     }
 
@@ -217,14 +217,14 @@ int main (int argc, char *argv[])
 
     for (int i = 0; i < numStream; i++)
     {
-        if (i != numStream-1)
-        {
             cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
-        }
-        else
-        {
-            cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
-        }
+        // if (i != numStream-1)
+        // {
+        // }
+        // else
+        // {
+        //     cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
+        // }
     }
 
 

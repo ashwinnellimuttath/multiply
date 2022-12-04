@@ -161,6 +161,8 @@ int main (int argc, char *argv[])
         cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
     }
 
+    for (int i = 0; i < numStream; i++)
+        cudaStreamSynchronize(streams[i]);
 
 
 

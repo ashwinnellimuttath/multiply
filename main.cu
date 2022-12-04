@@ -3,7 +3,7 @@
 #include "kernel.cu"
 #include "support.h"
 
-const unsigned int numStream = 2;
+const unsigned int numStream = 1;
 
 int main (int argc, char *argv[])
 {
@@ -165,23 +165,23 @@ int main (int argc, char *argv[])
     startTime(&timer);
 	
     /*************************************************************************/
-    for(int i=0;i < VecSize;i+= segmentLen*2) { // loop over data in chunks
- // interweave stream 1 and steam 2
-        cudaMemcpyAsync(dev_a1,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams1);
-        cudaMemcpyAsync(dev_a2,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
-        cudaMemcpyAsync(dev_b1,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams1);
-        cudaMemcpyAsync(dev_b2,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
-        basicSgemmStream(segmentLen,segmentLen,segmentLen, dev_a1, dev_b1, dev_c1, streams1);
-        basicSgemmStream(segmentLen, segmentLen, segmentLen, dev_a2, dev_b2, dev_c2, streams2);
-        // kernel<<<(int)ceil(N/1024)+1,1024,0,stream1>>>(dev_a,dev_b,dev_c);
-        // kernel<<<(int)ceil(N/1024)+1,1024,0,stream2>>>(dev_a,dev_b,dev_c);
-        cudaMemcpyAsync(c+1,dev_c1,segmentLen*sizeof(float),cudaMemcpyDeviceToHost,streams1);
-        cudaMemcpyAsync(c+1,dev_c2,segmentLen*sizeof(float),cudaMemcpyDeviceToHost,streams2);
-    }
+//     for(int i=0;i < VecSize;i+= segmentLen*2) { // loop over data in chunks
+//  // interweave stream 1 and steam 2
+//         cudaMemcpyAsync(dev_a1,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams1);
+//         cudaMemcpyAsync(dev_a2,a+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
+//         cudaMemcpyAsync(dev_b1,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams1);
+//         cudaMemcpyAsync(dev_b2,b+i,segmentLen*sizeof(float),cudaMemcpyHostToDevice,streams2);
+//         basicSgemmStream(segmentLen,segmentLen,segmentLen, dev_a1, dev_b1, dev_c1, streams1);
+//         basicSgemmStream(segmentLen, segmentLen, segmentLen, dev_a2, dev_b2, dev_c2, streams2);
+//         // kernel<<<(int)ceil(N/1024)+1,1024,0,stream1>>>(dev_a,dev_b,dev_c);
+//         // kernel<<<(int)ceil(N/1024)+1,1024,0,stream2>>>(dev_a,dev_b,dev_c);
+//         cudaMemcpyAsync(c+1,dev_c1,segmentLen*sizeof(float),cudaMemcpyDeviceToHost,streams1);
+//         cudaMemcpyAsync(c+1,dev_c2,segmentLen*sizeof(float),cudaMemcpyDeviceToHost,streams2);
+//     }
 
 
-    cudaStreamSynchronize(streams1); // wait for stream1 to finish
-    cudaStreamSynchronize(streams2); 
+//     cudaStreamSynchronize(streams1); // wait for stream1 to finish
+//     cudaStreamSynchronize(streams2); 
 
 
 
@@ -205,28 +205,28 @@ int main (int argc, char *argv[])
     // }
 
 
-    // for (int i = 0; i < numStream; i++)
-    // {
-    //     int Offset = i * segmentLen;
-    //     cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
-    //     cudaMemcpyAsync(B_d, B_h, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+    for (int i = 0; i < numStream; i++)
+    {
+        int Offset = i * segmentLen;
+        cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
+        cudaMemcpyAsync(B_d, B_h, sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
         
-    //     // basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[Offset], B_ds[Offset], C_ds[Offset], streams[i]);
-    //     basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
-    //     // else
-    //     // {
-    //     //     cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-    //     //     cudaMemcpyAsync(B_d[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-    //     // }
-    //     // cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
-    //     // cudaStreamSynchronize(streams[i]);
-    // }
+        // basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[Offset], B_ds[Offset], C_ds[Offset], streams[i]);
+        basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
+        // else
+        // {
+        //     cudaMemcpyAsync(A_d[i], A_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+        //     cudaMemcpyAsync(B_d[i], B_h + i*segmentLen, sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
+        // }
+        // cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
+        // cudaStreamSynchronize(streams[i]);
+    }
 
-    // for (int i = 0; i < numStream; i++) {
-    //     int Offset = i * segmentLen;
-    //     cudaStreamSynchronize(streams[i]);
-    //     cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
-    // }
+    for (int i = 0; i < numStream; i++) {
+        int Offset = i * segmentLen;
+        cudaStreamSynchronize(streams[i]);
+        cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
+    }
 
 
 
@@ -309,7 +309,7 @@ int main (int argc, char *argv[])
 
     // printf(C_h, "c_h");fflush(stdout);
 
-    verify(a, b, c, matArow, matAcol, matBcol);
+    verify(A_h, B_h, C_h, matArow, matAcol, matBcol);
 
 
     // Free memory ------------------------------------------------------------

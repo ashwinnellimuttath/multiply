@@ -184,7 +184,7 @@ int main (int argc, char *argv[])
     {
         if (i != numStream-1)
         {
-            basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[i], B_ds[i], C_ds[i], streams[i]);
+            basicSgemmStream(matArow, matArow/numStream, matArow/numStream, A_ds[i], B_ds[i], C_ds[i], streams[i]);
         }
         else
         {

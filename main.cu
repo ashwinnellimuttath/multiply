@@ -18,7 +18,8 @@ int main (int argc, char *argv[])
 
     float *A_h, *B_h, *C_h;
     float *A_d, *B_d, *C_d;
-    // float *A_d[numStream], *B_d[numStream], *C_d[numStream];
+
+    float *A_ds[numStream], *B_ds[numStream], *C_ds[numStream];
 
 
 
@@ -262,9 +263,9 @@ int main (int argc, char *argv[])
     cudaFree(C_d);
     for (int i = 0; i < numStream; i++)
     {
-        // cudaFree(A_d[i]);
-        // cudaFree(B_d[i]);
-        // cudaFree(C_d[i]);
+        cudaFree(A_ds[i]);
+        cudaFree(B_ds[i]);
+        cudaFree(C_ds[i]);
         cudaStreamDestroy(streams[i]);
     }
     /*************************************************************************/

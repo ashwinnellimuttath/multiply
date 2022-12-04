@@ -248,25 +248,25 @@ int main (int argc, char *argv[])
 
 
     // Free memory ------------------------------------------------------------
-    free(A_h);
-    free(B_h);
-    free(C_h);
+    // free(A_h);
+    // free(B_h);
+    // free(C_h);
 
-    // cudaFreeHost(A_h);
-    // cudaFreeHost(B_h);
-    // cudaFreeHost(C_h);
+    cudaFreeHost(A_h);
+    cudaFreeHost(B_h);
+    cudaFreeHost(C_h);
     /*************************************************************************/
     //INSERT CODE HERE
     cudaFree(A_d);
     cudaFree(B_d);
     cudaFree(C_d);
-    // for (int i = 0; i < numStream; i++)
-    // {
-    //     cudaFree(A_d[i]);
-    //     cudaFree(B_d[i]);
-    //     cudaFree(C_d[i]);
-    //     cudaStreamDestroy(streams[i]);
-    // }
+    for (int i = 0; i < numStream; i++)
+    {
+        cudaFree(A_d[i]);
+        cudaFree(B_d[i]);
+        cudaFree(C_d[i]);
+        cudaStreamDestroy(streams[i]);
+    }
     /*************************************************************************/
 ;
     return 0;

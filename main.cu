@@ -188,7 +188,7 @@ int main (int argc, char *argv[])
         }
         else
         {
-            basicSgemmStream(VecSize, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
+            basicSgemmStream(2, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
         }
         cudaStreamSynchronize(streams[i]);
     }

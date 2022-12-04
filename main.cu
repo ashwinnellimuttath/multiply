@@ -262,9 +262,9 @@ int main (int argc, char *argv[])
     cudaFree(C_d);
     for (int i = 0; i < numStream; i++)
     {
-        cudaFree(A_d[i]);
-        cudaFree(B_d[i]);
-        cudaFree(C_d[i]);
+        // cudaFree(A_d[i]);
+        // cudaFree(B_d[i]);
+        // cudaFree(C_d[i]);
         cudaStreamDestroy(streams[i]);
     }
     /*************************************************************************/

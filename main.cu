@@ -85,9 +85,9 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     //INSERT CODE HERE
-    cudaMalloc((float**) &A_d, sizeof(float)*A_sz);
-    cudaMalloc((float**) &B_d, sizeof(float)*B_sz);
-    cudaMalloc((float**) &C_d, sizeof(float)*C_sz); 
+    // cudaMalloc((float**) &A_d, sizeof(float)*A_sz);
+    // cudaMalloc((float**) &B_d, sizeof(float)*B_sz);
+    // cudaMalloc((float**) &C_d, sizeof(float)*C_sz); 
 
     // for (int i = 0; i < numStream; i++)
     // {

@@ -106,9 +106,9 @@ int main (int argc, char *argv[])
 
     for (int i = 0; i < numStream; i++)
     {
-            cudaMalloc((void**) &A_d[i], sizeof(float) * VecSize);
-            cudaMalloc((void**) &B_d[i], sizeof(float) * VecSize);
-            cudaMalloc((void**) &C_d[i], sizeof(float) * VecSize);
+            cudaMalloc((float**) &A_d[i], sizeof(float) * VecSize);
+            cudaMalloc((float**) &B_d[i], sizeof(float) * VecSize);
+            cudaMalloc((float**) &C_d[i], sizeof(float) * VecSize);
 
     }
 

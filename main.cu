@@ -180,19 +180,19 @@ int main (int argc, char *argv[])
     startTime(&timer);
 
 
-    // basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
-    for (int i = 0; i < numStream; i++)
-    {
-        if (i != numStream-1)
-        {
-            basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[i], B_ds[i], C_ds[i], streams[i]);
-        }
-        else
-        {
-            basicSgemmStream(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
-        }
-        cudaStreamSynchronize(streams[i]);
-    }
+    basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
+    // for (int i = 0; i < numStream; i++)
+    // {
+    //     if (i != numStream-1)
+    //     {
+    //         basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[i], B_ds[i], C_ds[i], streams[i]);
+    //     }
+    //     else
+    //     {
+    //         basicSgemmStream(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_ds[i], B_ds[i], C_ds[i], streams[i]);
+    //     }
+    //     cudaStreamSynchronize(streams[i]);
+    // }
 
 
 

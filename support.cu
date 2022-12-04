@@ -24,6 +24,7 @@ void verify(float *A, float *B, float *C, unsigned int m, unsigned int k,
       // printf("\nsum %u\n\n",sum, C[row*n + col]);
       // printf("\nsum %u\n\n",C[row*n + col]);
       printf("\nsums %u\n\n",C[row*n + col]);
+      printf("\nsumValue %u\n\n",sum);
       if (relativeError > relativeTolerance
         || relativeError < -relativeTolerance) {
         printf("\nTEST FAILED %u\n\n",count);

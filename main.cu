@@ -81,12 +81,14 @@ int main (int argc, char *argv[])
     cudaHostAlloc((void**)&A_h, A_sz*sizeof(float), cudaHostAllocDefault);
     cudaHostAlloc((void**)&a, A_sz*sizeof(float), cudaHostAllocDefault);
     for (unsigned int i=0; i < A_sz; i++) { A_h[i] = (rand()%100)/100.00; }
+    for (unsigned int i=0; i < A_sz; i++) { a[i] = (rand()%100)/100.00; }
 
     // B_h = (float*) malloc( sizeof(float)*B_sz );
     cudaHostAlloc((void**)&B_h, B_sz*sizeof(float), cudaHostAllocDefault);
     cudaHostAlloc((void**)&b, A_sz*sizeof(float), cudaHostAllocDefault);
 
-    for (unsigned int i=0; i < B_sz; i++) { B_h[i] = (rand()%100)/100.00; }
+    for (unsigned int i=0; i < A_sz; i++) { A_h[i] = (rand()%100)/100.00; }
+    for (unsigned int i=0; i < B_sz; i++) { b[i] = (rand()%100)/100.00; }
 
     // C_h = (float*) malloc( sizeof(float)*C_sz );
     cudaHostAlloc((void**)&C_h, C_sz*sizeof(float), cudaHostAllocDefault);

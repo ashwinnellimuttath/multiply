@@ -17,7 +17,6 @@ int main (int argc, char *argv[])
     startTime(&timer);
 
     float *A_h, *B_h, *C_h;
-    float *A_d, *B_d, *C_d;
 
     float *A_ds[numStream], *B_ds[numStream], *C_ds[numStream];
 
@@ -172,8 +171,8 @@ int main (int argc, char *argv[])
 
     /*************************************************************************/
     
-    cudaDeviceSynchronize();
-    stopTime(&timer); printf("%f s\n", elapsedTime(timer));
+    // cudaDeviceSynchronize();
+    // stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
     // Launch kernel using standard sgemm interface ---------------------------
     printf("Launching kernel..."); fflush(stdout);
@@ -203,9 +202,9 @@ int main (int argc, char *argv[])
 
 
 
-    cuda_ret = cudaDeviceSynchronize();
-    if(cuda_ret != cudaSuccess) printf("Unable to launch kernel");
-    stopTime(&timer); printf("%f s\n", elapsedTime(timer));
+    // cuda_ret = cudaDeviceSynchronize();
+    // if(cuda_ret != cudaSuccess) printf("Unable to launch kernel");
+    // stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
     // Copy device variables from host ----------------------------------------
     printf("Copying data from device to host..."); fflush(stdout);

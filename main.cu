@@ -220,11 +220,11 @@ int main (int argc, char *argv[])
     {
         if (i != numStream-1)
         {
-            cudaMemcpyAsync(C_h + i*segmentLen, C_d[i], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
+            cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
         }
         else
         {
-            cudaMemcpyAsync(C_h + i*segmentLen, C_d[i], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
+            cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
         }
     }
 

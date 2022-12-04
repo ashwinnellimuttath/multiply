@@ -3,7 +3,7 @@
 #include "kernel.cu"
 #include "support.h"
 
-const unsigned int numStream = 4;
+const unsigned int numStream = 3;
 
 int main (int argc, char *argv[])
 {
@@ -58,7 +58,7 @@ int main (int argc, char *argv[])
     A_sz = matArow*matAcol;
     B_sz = matBrow*matBcol;
     C_sz = matArow*matBcol;
-    VecSize = matArow*matAcol
+    VecSize = matArow*matAcol;
     const int segmentLen = (matArow*matAcol) / numStream;
 
     // A_h = (float*) malloc( sizeof(float)*A_sz );
@@ -162,7 +162,7 @@ int main (int argc, char *argv[])
         }
         else
         {
-            basicSgemm(segmentLen + VecSize % numStream, A_d[i], B_d[i], C_d[i], streams[i]);
+            basicSgemm(segmentLen + VecSize % numStream, segmentLen + VecSize % numStream,segmentLen + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
         }
     }
 

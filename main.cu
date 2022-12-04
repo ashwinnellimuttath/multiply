@@ -17,8 +17,8 @@ int main (int argc, char *argv[])
     startTime(&timer);
 
     float *A_h, *B_h, *C_h;
-    // float *A_d, *B_d, *C_d;
-    float *A_d[numStream], *B_d[numStream], *C_d[numStream];
+    float *A_d, *B_d, *C_d;
+    // float *A_d[numStream], *B_d[numStream], *C_d[numStream];
 
 
 
@@ -178,18 +178,18 @@ int main (int argc, char *argv[])
     startTime(&timer);
 
 
-    basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
-    // for (int i = 0; i < numStream; i++)
-    // {
-    //     if (i != numStream-1)
-    //     {
-    //         basicSgemm(matArow/numStream, matArow/numStream, matArow/numStream, A_d[i], B_d[i], C_d[i], streams[i]);
-    //     }
-    //     else
-    //     {
-    //         basicSgemm(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
-    //     }
-    // }
+    // basicSgemm(matArow, matBcol, matBrow, A_d, B_d, C_d);
+    for (int i = 0; i < numStream; i++)
+    {
+        if (i != numStream-1)
+        {
+            basicSgemm(matArow/numStream, matArow/numStream, matArow/numStream, A_d[i], B_d[i], C_d[i], streams[i]);
+        }
+        else
+        {
+            basicSgemm(matArow/numStream + VecSize % numStream, matArow/numStream + VecSize % numStream,matArow/numStream + VecSize % numStream,A_d[i], B_d[i], C_d[i], streams[i]);
+        }
+    }
 
 
 
@@ -257,14 +257,14 @@ int main (int argc, char *argv[])
     cudaFreeHost(C_h);
     /*************************************************************************/
     //INSERT CODE HERE
-    // cudaFree(A_d);
-    // cudaFree(B_d);
-    // cudaFree(C_d);
+    cudaFree(A_d);
+    cudaFree(B_d);
+    cudaFree(C_d);
     for (int i = 0; i < numStream; i++)
     {
-        cudaFree(A_d[i]);
-        cudaFree(B_d[i]);
-        cudaFree(C_d[i]);
+        // cudaFree(A_d[i]);
+        // cudaFree(B_d[i]);
+        // cudaFree(C_d[i]);
         cudaStreamDestroy(streams[i]);
     }
     /*************************************************************************/

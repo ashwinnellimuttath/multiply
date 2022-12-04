@@ -178,8 +178,8 @@ int main (int argc, char *argv[])
     }
 
 
-    cudaStreamSynchronise(streams1); // wait for stream1 to finish
-    cudaStreamSynchronise(streams2); 
+    cudaStreamSynchronize(streams1); // wait for stream1 to finish
+    cudaStreamSynchronize(streams2); 
 
 
 

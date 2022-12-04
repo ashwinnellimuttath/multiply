@@ -58,7 +58,7 @@ __global__ void mysgemm(int m, int n, int k, const float *A, const float *B, flo
     /*************************************************************************/
 }
 
-void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C)
+void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C, cudaStream_t stream)
 {
     // Initialize thread block and kernel grid dimensions ---------------------
 
@@ -74,7 +74,7 @@ void basicSgemm(int m, int n, int k, const float *A, const float *B, float *C)
 
     /*************************************************************************/
     //INSERT CODE HERE
-    mysgemm<<<DimGrid,DimBlock>>>(m,n,k,A,B,C);  	
+    mysgemm<<<DimGrid,DimBlock, 0, stream>>>(m,n,k,A,B,C);  	
     /*************************************************************************/
 }
 

@@ -181,7 +181,7 @@ int main (int argc, char *argv[])
         
         // // basicSgemmStream(matArow/numStream, matArow/numStream, matArow/numStream, A_ds[Offset], B_ds[Offset], C_ds[Offset], streams[i]);
         // basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
-        if (i != numStream-1) {
+        if (1) {
             cudaMemcpyAsync(A_ds[i], A_h + i*segmentLen, sizeof(float)*VecSize, cudaMemcpyHostToDevice, streams[i]);
             cudaMemcpyAsync(B_ds[i], B_h + i*segmentLen, sizeof(float)*VecSize, cudaMemcpyHostToDevice, streams[i]);
             
@@ -208,7 +208,7 @@ int main (int argc, char *argv[])
         int Offset = i * segmentLen;
         cudaStreamSynchronize(streams[i]);
         // cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
-        if (i != numStream-1) {
+        if (1) {
 
             cudaMemcpyAsync(C_h + i*segmentLen, C_ds[i], sizeof(float)*VecSize, cudaMemcpyDeviceToHost, streams[i]);
         } else {

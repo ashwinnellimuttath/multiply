@@ -175,7 +175,7 @@ int main (int argc, char *argv[])
     {
 
         
-        int Offset = i * segmentLen;
+        float Offset = i * segmentLen;
         // cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
         // cudaMemcpyAsync(&B_d[Offset], &B_h[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
         
@@ -206,7 +206,7 @@ int main (int argc, char *argv[])
     }
 
     for (int i = 0; i < numStream; i++) {
-        int Offset = i * segmentLen;
+        float Offset = i * segmentLen;
         // cudaStreamSynchronize(streams[i]);
         // cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
         if (i != numStream-1) {

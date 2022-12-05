@@ -22,7 +22,7 @@ void verify(float *A, float *B, float *C, unsigned int m, unsigned int k,
       if (relativeError > relativeTolerance
         || relativeError < -relativeTolerance) {
         printf("\nTEST FAILED %u\n\n",count);
-        // exit(1);
+        exit(1);
       }
     }
   }

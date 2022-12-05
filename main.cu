@@ -203,20 +203,6 @@ int main (int argc, char *argv[])
         // }
         // cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
         // cudaStreamSynchronize(streams[i]);
-        // if (i != numStream-1) {
-
-        //     cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
-        // } else {
-        //     Offset = (i * segmentLen) + VecSize % numStream;
-        //     cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
-        // }
-        // cudaStreamSynchronize(streams[i]);
-    }
-
-    for (int i = 0; i < numStream; i++) {
-        int Offset = i * segmentLen;
-        cudaStreamSynchronize(streams[i]);
-        // cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
         if (i != numStream-1) {
 
             cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
@@ -224,7 +210,21 @@ int main (int argc, char *argv[])
             Offset = (i * segmentLen) + VecSize % numStream;
             cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
         }
+        cudaStreamSynchronize(streams[i]);
     }
+
+    // for (int i = 0; i < numStream; i++) {
+    //     int Offset = i * segmentLen;
+    //     cudaStreamSynchronize(streams[i]);
+    //     // cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
+    //     if (i != numStream-1) {
+
+    //         cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
+    //     } else {
+    //         Offset = (i * segmentLen) + VecSize % numStream;
+    //         cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
+    //     }
+    // }
 
 
 

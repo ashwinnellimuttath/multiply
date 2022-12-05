@@ -128,9 +128,9 @@ int main (int argc, char *argv[])
             // cudaMalloc((float**) &C_ds[i], sizeof(float) * VecSize);
 
     }
-    cudaMalloc((int **)&A_d, sizeof(float) * VecSize);
-    cudaMalloc((int **)&B_d, sizeof(float) * VecSize);
-    cudaMalloc((int **)&C_d, sizeof(float) * VecSize);
+    cudaMalloc((int **)&A_d, sizeof(float) * segmentLen);
+    cudaMalloc((int **)&B_d, sizeof(float) * segmentLen);
+    cudaMalloc((int **)&C_d, sizeof(float) * segmentLen);
 
 
     /*************************************************************************/

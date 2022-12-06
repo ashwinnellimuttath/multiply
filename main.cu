@@ -151,7 +151,7 @@ int main (int argc, char *argv[])
 
         }
 
-        cudaStreamSynchronize(streams[i]);
+        // cudaStreamSynchronize(streams[i]);
     }
 
     /*************************************************************************/

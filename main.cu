@@ -89,7 +89,7 @@ int main (int argc, char *argv[])
     //INSERT CODE HERE
 
 
-    cudaMalloc((float **)&A_d, sizeof(float) * VecSize);
+    cudaMalloc((float **)&A_d, sizeof(float) * segmentLen);
     cudaMalloc((float **)&B_d, sizeof(float) * VecSize);
     cudaMalloc((float **)&C_d, sizeof(float) * VecSize);
 

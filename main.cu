@@ -138,9 +138,13 @@ int main (int argc, char *argv[])
         // printf("segment..."); fflush(stdout);
         printf("%u heree\n", sizeof(float)*(segmentLen + (VecSize % numStream)));fflush(stdout);
         printf("%u legth\n", sizeof(float) * (segmentLen) );fflush(stdout);
-        
+            int device = -1;
+        cudaGetDevice(&device);
         int Offset = i * segmentLen;
         if (1) {
+        cudaMemPrefetchAsync(A, sizeof(float) * A_sz, device, streams[i]);
+        cudaMemPrefetchAsync(B, sizeof(float) * B_sz, device, streams[i]);
+        cudaMemPrefetchAsync(C, sizeof(float) * C_sz, device, streams[i]);
             // cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
             // cudaMemcpyAsync(B_d, B_h, sizeof(float)*VecSize, cudaMemcpyHostToDevice, streams[i]);
             

@@ -93,7 +93,9 @@ int main (int argc, char *argv[])
     cudaMalloc((float **)&B_d, sizeof(float) * VecSize);
     cudaMalloc((float **)&C_d, sizeof(float) * VecSize);
 
-
+    // cudaMallocManaged(&A_d, sizeof(float) * VecSize)
+    // cudaMallocManaged(&B_d, sizeof(float) * VecSize)
+    // cudaMallocManaged(&C_d, sizeof(float) * VecSize)
 
 
     /*************************************************************************/
@@ -108,9 +110,25 @@ int main (int argc, char *argv[])
     /*************************************************************************/
 
     //INSERT CODE HERE
-
+//   const int blockSize = 256, nStreams = 4;
+//   const int n = 4 * 1024 * blockSize * nStreams;
+//   const int streamSize = n / nStreams;
+//   const int streamBytes = streamSize * sizeof(float);
+//     for (int i = 0; i < nStreams; ++i) {
+//     int offset = i * streamSize;
+//     checkCuda( cudaMemcpyAsync(&d_a[offset], &a[offset], 
+//                                streamBytes, cudaMemcpyHostToDevice, 
+//                                stream[i]) );
+//     kernel<<<streamSize/blockSize, blockSize, 0, stream[i]>>>(d_a, offset);
+//     checkCuda( cudaMemcpyAsync(&a[offset], &d_a[offset], 
+//                                streamBytes, cudaMemcpyDeviceToHost,
+//                                stream[i]) );
+//   }
     for (int i = 0; i < numStream; i++)
     {   
+        // printf("segment..."); fflush(stdout);
+        printf("%u heree\n", sizeof(float)*(segmentLen + (VecSize % numStream)));fflush(stdout);
+        printf("%u legth\n", sizeof(float) * (segmentLen) );fflush(stdout);
         
         int Offset = i * segmentLen;
         if (i != numStream-1) {
@@ -133,7 +151,7 @@ int main (int argc, char *argv[])
 
         }
 
-        // cudaStreamSynchronize(streams[i]);
+        cudaStreamSynchronize(streams[i]);
     }
 
     /*************************************************************************/

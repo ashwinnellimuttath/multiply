@@ -60,6 +60,9 @@ int main (int argc, char *argv[])
 
     VecSize = matArow*matBcol;
     const int segmentLen = VecSize / numStream;
+    const int segmentLenA = A_sz / numStream;
+    const int segmentLenB = B_sz / numStream;
+    const int segmentLenC = C_sz / numStream;
 
     // A_h = (float*) malloc( sizeof(float)*A_sz );
     cudaHostAlloc((void**)&A_h, A_sz*sizeof(float), cudaHostAllocDefault);

@@ -140,7 +140,7 @@ int main (int argc, char *argv[])
         }
         else {
             Offset = (i * segmentLen) + VecSize % numStream;
-            cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*(VecSize), cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*(segmentLen+ VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
             cudaMemcpyAsync(&B_d[Offset], &B_h[Offset], sizeof(float)*(VecSize), cudaMemcpyHostToDevice, streams[i]);
             
             basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);

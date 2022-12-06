@@ -130,6 +130,8 @@ int main (int argc, char *argv[])
         }
         else {
             Offset = (i * segmentLen) + (VecSize % numStream);
+            OffsetA = (i * segmentLenA) + (A_sz % numStream);
+            OffsetC = (i * segmentLenC) + (C_sz % numStream);
             cudaMemcpyAsync(&A_d[OffsetA], &A_h[OffsetA], sizeof(float)*(segmentLenA + (A_sz % numStream)), cudaMemcpyHostToDevice, streams[i]);
             cudaMemcpyAsync(B_d, B_h, sizeof(float)*(B_sz), cudaMemcpyHostToDevice, streams[i]);
             

@@ -66,7 +66,7 @@ int main (int argc, char *argv[])
     for (unsigned int i=0; i < A_sz; i++) { A_h[i] = (rand()%100)/100.00; }
     // cudaHostAlloc((void**)&a, A_sz*sizeof(float), cudaHostAllocDefault);
     cudaHostAlloc((void**)&B_h, B_sz*sizeof(float), cudaHostAllocDefault);
-    for (unsigned int i=0; i < B_sz; i++) { B_h[i] = (rand()%100)/100.00; }
+    for (unsigned int i=0; i < A_sz; i++) { B_h[i] = (rand()%100)/100.00; }
 
     // cudaHostAlloc((void**)&b, A_sz*sizeof(float), cudaHostAllocDefault);
     // for (unsigned int i=0; i < B_sz; i++) { b[i] = (rand()%100)/100.00; }

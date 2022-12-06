@@ -125,9 +125,9 @@ int main (int argc, char *argv[])
 //                                stream[i]) );
 //   }
     for (int i = 0; i < numStream; i++)
-    {
-
-        
+    {   
+        printf("segment..."); fflush(stdout);
+        printf("%f", segmentLen + VecSize % numStream);fflush(stdout);
         int Offset = i * segmentLen;
         if (i != numStream-1) {
             cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);

@@ -68,9 +68,6 @@ int main (int argc, char *argv[])
     cudaHostAlloc((void**)&B_h, B_sz*sizeof(float), cudaHostAllocDefault);
     for (unsigned int i=0; i < A_sz; i++) { B_h[i] = (rand()%100)/100.00; }
 
-    // cudaHostAlloc((void**)&b, A_sz*sizeof(float), cudaHostAllocDefault);
-    // for (unsigned int i=0; i < B_sz; i++) { b[i] = (rand()%100)/100.00; }
-
     // C_h = (float*) malloc( sizeof(float)*C_sz );
     cudaHostAlloc((void**)&C_h, C_sz*sizeof(float), cudaHostAllocDefault);
     // cudaHostAlloc((void**)&c, A_sz*sizeof(float), cudaHostAllocDefault);
@@ -93,9 +90,6 @@ int main (int argc, char *argv[])
     cudaMalloc((float **)&B_d, sizeof(float) * VecSize);
     cudaMalloc((float **)&C_d, sizeof(float) * VecSize);
 
-    // cudaMallocManaged(&A_d, sizeof(float) * VecSize)
-    // cudaMallocManaged(&B_d, sizeof(float) * VecSize)
-    // cudaMallocManaged(&C_d, sizeof(float) * VecSize)
 
 
     /*************************************************************************/
@@ -110,28 +104,13 @@ int main (int argc, char *argv[])
     /*************************************************************************/
 
     //INSERT CODE HERE
-//   const int blockSize = 256, nStreams = 4;
-//   const int n = 4 * 1024 * blockSize * nStreams;
-//   const int streamSize = n / nStreams;
-//   const int streamBytes = streamSize * sizeof(float);
-//     for (int i = 0; i < nStreams; ++i) {
-//     int offset = i * streamSize;
-//     checkCuda( cudaMemcpyAsync(&d_a[offset], &a[offset], 
-//                                streamBytes, cudaMemcpyHostToDevice, 
-//                                stream[i]) );
-//     kernel<<<streamSize/blockSize, blockSize, 0, stream[i]>>>(d_a, offset);
-//     checkCuda( cudaMemcpyAsync(&a[offset], &d_a[offset], 
-//                                streamBytes, cudaMemcpyDeviceToHost,
-//                                stream[i]) );
-//   }
     for (int i = 0; i < numStream; i++)
-    {
-
+    {   
         
         int Offset = i * segmentLen;
         if (i != numStream-1) {
             cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
-            cudaMemcpyAsync(&B_d[Offset], &B_h[Offset], sizeof(float)*VecSize, cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(B_d, B_h, sizeof(float)*VecSize, cudaMemcpyHostToDevice, streams[i]);
             
             basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
 
@@ -139,13 +118,13 @@ int main (int argc, char *argv[])
 
         }
         else {
-            Offset = (i * segmentLen) + VecSize % numStream;
-            cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*(segmentLen+ VecSize % numStream), cudaMemcpyHostToDevice, streams[i]);
-            cudaMemcpyAsync(&B_d[Offset], &B_h[Offset], sizeof(float)*(VecSize), cudaMemcpyHostToDevice, streams[i]);
+            Offset = (i * segmentLen) + (VecSize % numStream);
+            cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*(segmentLen+ (VecSize % numStream)), cudaMemcpyHostToDevice, streams[i]);
+            cudaMemcpyAsync(B_d, B_h, sizeof(float)*(VecSize), cudaMemcpyHostToDevice, streams[i]);
             
             basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
             
-            cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + VecSize % numStream), cudaMemcpyDeviceToHost, streams[i]);
+            cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + (VecSize % numStream)), cudaMemcpyDeviceToHost, streams[i]);
 
         }
 

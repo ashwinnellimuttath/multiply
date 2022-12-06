@@ -9,16 +9,13 @@ int main (int argc, char *argv[])
 {
 
     Timer timer;
-    cudaError_t cuda_ret;
 
     // Initialize host variables ----------------------------------------------
 
     printf("\nSetting up the problem..."); fflush(stdout);
     startTime(&timer);
 
-    float *A_h, *B_h, *C_h;
-
-    float *A_d, *B_d, *C_d;
+    float *A, *B, *C;
 
     size_t A_sz, B_sz, C_sz;
     unsigned matArow, matAcol;
@@ -61,17 +58,6 @@ int main (int argc, char *argv[])
     VecSize = matArow*matAcol;
     const int segmentLen = VecSize / numStream;
 
-    // A_h = (float*) malloc( sizeof(float)*A_sz );
-    cudaHostAlloc((void**)&A_h, A_sz*sizeof(float), cudaHostAllocDefault);
-    for (unsigned int i=0; i < A_sz; i++) { A_h[i] = (rand()%100)/100.00; }
-    // cudaHostAlloc((void**)&a, A_sz*sizeof(float), cudaHostAllocDefault);
-    cudaHostAlloc((void**)&B_h, B_sz*sizeof(float), cudaHostAllocDefault);
-    for (unsigned int i=0; i < A_sz; i++) { B_h[i] = (rand()%100)/100.00; }
-
-    // C_h = (float*) malloc( sizeof(float)*C_sz );
-    cudaHostAlloc((void**)&C_h, C_sz*sizeof(float), cudaHostAllocDefault);
-    // cudaHostAlloc((void**)&c, A_sz*sizeof(float), cudaHostAllocDefault);
-
 
     stopTime(&timer); printf("%f s\n", elapsedTime(timer));
     printf("    A: %u x %u\n    B: %u x %u\n    C: %u x %u\n", matArow, matAcol,
@@ -85,10 +71,12 @@ int main (int argc, char *argv[])
     /*************************************************************************/
     //INSERT CODE HERE
 
+    cudaMallocManaged(&A, sizeof(float) * A_sz);
+    for (unsigned int i=0; i < A_sz; i++) { A[i] = (rand()%100)/100.00; }
+    cudaMallocManaged(&B, sizeof(float) * B_sz);
+    for (unsigned int i=0; i < B_sz; i++) { B[i] = (rand()%100)/100.00; }
 
-    cudaMalloc((float **)&A_d, sizeof(float) * VecSize);
-    cudaMalloc((float **)&B_d, sizeof(float) * VecSize);
-    cudaMalloc((float **)&C_d, sizeof(float) * VecSize);
+    cudaMallocManaged(&C, sizeof(float) * C_sz);
 
 
 
@@ -106,29 +94,15 @@ int main (int argc, char *argv[])
     //INSERT CODE HERE
     for (int i = 0; i < numStream; i++)
     {   
-        
+        int device = -1;
+        cudaGetDevice(&device);
         int Offset = i * segmentLen;
-        if (i != numStream-1) {
-            cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*segmentLen, cudaMemcpyHostToDevice, streams[i]);
-            cudaMemcpyAsync(B_d, B_h, sizeof(float)*VecSize, cudaMemcpyHostToDevice, streams[i]);
+        cudaMemPrefetchAsync(A, sizeof(float) * A_sz, device, streams[i]);
+        cudaMemPrefetchAsync(B, sizeof(float) * B_sz, device, streams[i]);
+        cudaMemPrefetchAsync(C, sizeof(float) * C_sz, device, streams[i]);
             
-            basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
+        basicSgemmStream(matArow,matArow,matArow, &A[Offset], B, &C[Offset], streams[i]);
 
-            cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*segmentLen, cudaMemcpyDeviceToHost, streams[i]);
-
-        }
-        else {
-            Offset = (i * segmentLen) + (VecSize % numStream);
-            cudaMemcpyAsync(&A_d[Offset], &A_h[Offset], sizeof(float)*(segmentLen+ (VecSize % numStream)), cudaMemcpyHostToDevice, streams[i]);
-            cudaMemcpyAsync(B_d, B_h, sizeof(float)*(VecSize), cudaMemcpyHostToDevice, streams[i]);
-            
-            basicSgemmStream(matArow,matArow,matArow, &A_d[Offset], B_d, &C_d[Offset], streams[i]);
-            
-            cudaMemcpyAsync(&C_h[Offset], &C_d[Offset], sizeof(float)*(segmentLen + (VecSize % numStream)), cudaMemcpyDeviceToHost, streams[i]);
-
-        }
-
-        // cudaStreamSynchronize(streams[i]);
     }
 
     /*************************************************************************/
@@ -162,24 +136,17 @@ int main (int argc, char *argv[])
 
     printf("Verifying results..."); fflush(stdout);
 
-    // printf(C_h, "c_h");fflush(stdout);
 
-    verify(A_h, B_h, C_h, matArow, matAcol, matBcol);
+    verify(A, B, C, matArow, matAcol, matBcol);
 
 
     // Free memory ------------------------------------------------------------
-    // free(A_h);
-    // free(B_h);
-    // free(C_h);
 
-    cudaFreeHost(A_h);
-    cudaFreeHost(B_h);
-    cudaFreeHost(C_h);
     /*************************************************************************/
     //INSERT CODE HERE
-    cudaFree(A_d);
-    cudaFree(B_d);
-    cudaFree(C_d);
+    cudaFree(A);
+    cudaFree(B);
+    cudaFree(C);
     for (int i = 0; i < numStream; i++)
     {
         cudaStreamDestroy(streams[i]);

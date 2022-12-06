@@ -127,7 +127,7 @@ int main (int argc, char *argv[])
     for (int i = 0; i < numStream; i++)
     {   
         // printf("segment..."); fflush(stdout);
-        printf("%u heree\n", 5);fflush(stdout);
+        printf("%u heree\n", segmentLen + VecSize % numStream);fflush(stdout);
         
         int Offset = i * segmentLen;
         if (i != numStream-1) {

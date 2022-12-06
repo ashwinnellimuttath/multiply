@@ -3,7 +3,7 @@
 #include "kernel.cu"
 #include "support.h"
 
-const unsigned int numStream = 4;
+const unsigned int numStream = 3;
 
 int main (int argc, char *argv[])
 {

@@ -3,7 +3,7 @@
 #include "kernel.cu"
 #include "support.h"
 
-const unsigned int numStream = 3;
+const unsigned int numStream = 4;
 
 int main (int argc, char *argv[])
 {
@@ -125,10 +125,8 @@ int main (int argc, char *argv[])
 //                                stream[i]) );
 //   }
     for (int i = 0; i < numStream; i++)
-    {   
-        // printf("segment..."); fflush(stdout);
-        printf("%u heree\n", segmentLen + VecSize % numStream);fflush(stdout);
-        printf("%u heree\n", segmentLen + VecSize % numStream);fflush(stdout);
+    {
+
         
         int Offset = i * segmentLen;
         if (i != numStream-1) {

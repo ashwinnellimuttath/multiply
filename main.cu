@@ -58,7 +58,7 @@ int main (int argc, char *argv[])
     B_sz = matBrow*matBcol;
     C_sz = matArow*matBcol;
 
-    VecSize = matArow*matBcol;
+    VecSize = matArow*matAcol;
     const int segmentLen = VecSize / numStream;
     const int segmentLenA = A_sz / numStream;
     const int segmentLenB = B_sz / numStream;
@@ -92,9 +92,9 @@ int main (int argc, char *argv[])
     //INSERT CODE HERE
 
 
-    cudaMalloc((float **)&A_d, sizeof(float) * A_sz);
-    cudaMalloc((float **)&B_d, sizeof(float) * B_sz);
-    cudaMalloc((float **)&C_d, sizeof(float) * C_sz);
+    cudaMalloc((float **)&A_d, sizeof(float) * VecSize);
+    cudaMalloc((float **)&B_d, sizeof(float) * VecSize);
+    cudaMalloc((float **)&C_d, sizeof(float) * VecSize);
 
 
 

@@ -105,7 +105,7 @@ int main (int argc, char *argv[])
         // cudaMemPrefetchAsync(C, sizeof(float) * C_sz, device, streams[i]);
             
         basicSgemmStream(matArow,matArow,matArow, &A[Offset], B, &C[Offset], streams[i]);
-        // cudaStreamSynchronize(streams[i]);
+        cudaStreamSynchronize(streams[i]);
     }
 
     /*************************************************************************/

@@ -99,7 +99,7 @@ int main (int argc, char *argv[])
         int Offset = i * segmentLen;
         cudaMemPrefetchAsync(A, sizeof(float) * A_sz, device, streams[i]);
         cudaMemPrefetchAsync(B, sizeof(float) * B_sz, device, streams[i]);
-        cudaMemPrefetchAsync(C, sizeof(float) * C_sz, device, streams[i]);
+        cudaMemPrefetchAsync(C, sizeof(float) * segmentLen, device, streams[i]);
         // cudaMemPrefetchAsync(A, sizeof(float) * A_sz, device, streams[i]);
         // cudaMemPrefetchAsync(B, sizeof(float) * B_sz, device, streams[i]);
         // cudaMemPrefetchAsync(C, sizeof(float) * C_sz, device, streams[i]);
